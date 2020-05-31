@@ -1,0 +1,29 @@
+<cm-dialog [id]="id">
+  <h3 slot="header" class="dialog-title">
+    Snooze
+  </h3>
+  <div slot="body" class="col-12">
+    <div *ngFor="let bt of bodyText">
+      <label for="field">{{ bt.created }} - {{ bt.UserEmail }}: {{ bt.Content }}</label>
+    </div>
+
+    <div class="form-input-special">
+      <hr />
+      <cm-select placeholder="15 minutes" value="15m" #timeSelect>
+        <cm-select-flag slot="icon"></cm-select-flag>
+        <cm-select-option slot="option" data-display="15 minutes" value="15m"></cm-select-option>
+        <cm-select-option slot="option" data-display="1 hour" value="1h"></cm-select-option>
+        <cm-select-option slot="option" data-display="8 hours" value="8h"></cm-select-option>
+        <cm-select-option slot="option" data-display="1 day" value="1d"></cm-select-option>
+      </cm-select>
+    </div>
+    <hr />
+  </div>
+
+  <div slot="footer">
+    <button class="btn btn-secondary" (click)="cancel()"> Cancel</button>
+    <button class="btn btn-primary" (click)="okModal() ">Snooze</button>
+  </div>
+</cm-dialog>
+
+

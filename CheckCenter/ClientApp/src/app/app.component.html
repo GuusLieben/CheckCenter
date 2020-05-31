@@ -1,0 +1,110 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="description" content="CM CheckCenter">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1657ea">
+  <meta name="robots" content="none">
+  <title>CheckCenter | CM</title>
+  <base href="/">
+  <link href="https://platformheader.cmtelecom.com/css/platform.aurora.v2.min.css" rel="stylesheet">
+  <link href="https://cm.com/app/aurora/css/v2/aurora.css" rel="stylesheet">
+  <link href="https://cdn.cm.com/cm/favicon-32x32.png" rel="icon">
+  <link href="https://cdn.cm.com/cm/apple-touch-icon.png" rel="apple-touch-icon">
+</head>
+
+<body class="dark">
+<input type="checkbox" id="cm-sidenav-toggle" (change)="menuToggle($event)" data-disable-screen-size-check #toggle>
+<label for="cm-sidenav-toggle"></label>
+
+<cm-sidenav *ngIf="!isLogin()">
+  <div class="form-group">
+    <div class="form-row">
+      <div class="form-switch">
+        <label class="switch">
+          <input type="checkbox" (click)="toggleDarkmode()" checked>
+          <span class="slider round"> </span>
+          <span class="label">Dark mode</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <br>
+  <cm-select data-icons value="priority" (cm-option-clicked)="updateSorter($event.detail.value)"
+             placeholder="Priority">
+    <cm-select-option slot="option" value="priority" data-display="Priority"
+                      data-icon="up cl-red-100"></cm-select-option>
+    <cm-select-option slot="option" value="title" data-display="Title" data-icon="font-size"></cm-select-option>
+    <cm-select-option slot="option" value="added" data-display="Added"
+                      data-icon="edit cl-yellow-100"></cm-select-option>
+    <cm-select-option slot="option" value="type" data-display="Type"
+                      data-icon="policy cl-green-100"></cm-select-option>
+  </cm-select>
+  <br>
+  <hr>
+
+  <cm-sidenav-header data-display="Global filters" data-open>
+    <cm-sidenav-option>
+      <div class="form-check">
+        <label>
+          <input type="checkbox" #activeFilter (click)="filter('active')" [checked]="getFilters().includes('active')"/>
+          <span class="label menu-label"> Active </span>
+        </label>
+      </div>
+    </cm-sidenav-option>
+    <cm-sidenav-option>
+      <div class="form-check">
+        <label>
+          <input type="checkbox" #snoozedFilter (click)="filter('snoozed')"  [checked]="getFilters().includes('snoozed')"/>
+          <span class="label menu-label"> Snoozed </span>
+        </label>
+      </div>
+    </cm-sidenav-option>
+    <cm-sidenav-option>
+      <div class="form-check">
+        <label>
+          <input type="checkbox" #resolvedFilter (click)="filter('resolved')" [checked]="getFilters().includes('resolved')"/>
+          <span class="label menu-label"> Resolved </span>
+        </label>
+      </div>
+    </cm-sidenav-option>
+  </cm-sidenav-header>
+
+  <cm-sidenav-header data-display="Sources" data-open>
+    <cm-sidenav-option *ngFor="let source of getSources()">
+      <div class="form-check">
+        <label>
+          <input type="checkbox" checked (click)="sourceFilter(source.id)"/>
+          <span class="label menu-label"> {{source.displayName}} </span>
+        </label>
+        <br>
+      </div>
+    </cm-sidenav-option>
+    <hr>
+    <div class="form-group">
+      <div class="form-row">
+        <div class="form-switch">
+          <button class="btn btn-cta m-t-48 " (click)="logout()">Log out</button>
+        </div>
+      </div>
+    </div>
+  </cm-sidenav-header>
+  
+</cm-sidenav>
+
+<platform-header title-text="CheckCenter" app-icon="fa fa-gamepad"></platform-header>
+
+<div class="container parent-container" (click)="closeMenu()">
+  <cm-overlay></cm-overlay>
+  <router-outlet></router-outlet>
+</div>
+
+<script type="text/javascript" src="https://cm.com/app/aurora/js/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="https://cm.com/app/aurora/js/moment-timezone-with-data.min.js"></script>
+<script type="text/javascript" src="https://cm.com/app/aurora/js/chart.min.js"></script>
+<script type="text/javascript" src="https://platformheader.cmtelecom.com/js/platform-header-js.min.js"></script>
+<script type="text/javascript" src="https://cm.com/app/aurora/js/webcomponents-loader.js"></script>
+<script type="text/javascript" src="https://cm.com/app/aurora/js/aurora-components-legacy.js"></script>
+</body>

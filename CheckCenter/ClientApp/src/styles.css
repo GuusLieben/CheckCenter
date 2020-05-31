@@ -1,0 +1,61 @@
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.form-check {
+  display: inline-flex;
+  margin: 5px 5px 0 -40px;
+}
+
+.container {
+  margin-top: 100px !important;
+}
+
+.cm-pfh-login-btn, .chatbtn {
+  display: none !important;
+}
+
+.container {
+  filter: unset !important;
+  max-width: 90% !important;
+  padding-left: 16px !important;
+  margin-left: 320px !important;
+  margin-top: 0 !important;
+}
+
+.container {
+  margin-left: 0;
+}
+
+.datatable .datatable-header {
+  border-bottom: 0 solid #000 !important;
+}
+
+.menu-label::before {
+  margin-top: 10px !important;
+  margin-left: -20px !important;
+}
+
+cm-sidenav-option {
+  margin-top: -15px !important;
+  margin-left: -40px !important;
+}
+
+cm-sidenav cm-sidenav-option:active, cm-sidenav cm-sidenav-option.active {
+  background-color: var(--background) !important;
+}
+
+.invisible {
+  display: none !important;
+}
