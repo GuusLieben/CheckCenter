@@ -1,0 +1,340 @@
+.wrapper {
+  overflow: hidden; /* add this to contain floated children */
+}
+
+cm-conversation cm-conversation-bubble .comment-delete {
+  position: relative;
+  float: right;
+  display: inline-block;
+}
+
+cm-conversation cm-conversation-bubble .time {
+  position: relative;
+  float: right;
+  display: inline-block;
+}
+
+cm-conversation cm-conversation-bubble {
+  transition: none !important;
+}
+
+.form-check > label > input + .label:before {
+  animation: none !important;
+}
+
+.form-check > label > input:checked + .label:before {
+  animation: none !important;
+}
+
+.time {
+  position: relative;
+  float: right;
+  display: inline-block;
+}
+
+.timestamp {
+  position: relative;
+  float: right;
+  display: inline-block;
+  opacity: 0.5;
+}
+
+.comment-delete {
+  position: relative;
+  float: right;
+  display: inline-block;
+}
+
+.check-column {
+  float: left;
+  width: 100%;
+}
+
+.detail-column {
+  float: left;
+}
+
+.top-closed {
+  padding-top: 0 !important;
+  width: 100% !important;
+  margin-left: 8px !important;
+}
+
+.row {
+  float: left;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (min-width: 1200px) {
+  .blur {
+    -webkit-filter: blur(5px) !important;
+    -moz-filter: blur(5px) !important;
+    -o-filter: blur(5px) !important;
+    -ms-filter: blur(5px) !important;
+    filter: blur(5px) !important;
+    cursor: grab;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .detail-column {
+    width: 100%;
+  }
+
+  .check-column {
+    width: 100%;
+
+  }
+
+  .column-container {
+    width: 100%;
+  }
+
+  .search-col {
+    width: 100%;
+  }
+}
+
+.card-container {
+  border-radius: 0 !important;
+}
+
+.container-col {
+  margin-left: -20px;
+  width: 840px;
+}
+
+.cm-expansion-panel-container {
+  padding-left: 8px;
+}
+
+#epb .expansion-panel-box {
+  border: 0 solid !important;
+}
+
+.form-input-special {
+  padding-left: 50px !important;
+  /*padding-right: 50px !important;*/
+}
+
+.card-header {
+  border-radius: 0 !important;
+  background-color: rgba(0, 0, 0, 0) !important;
+  padding: .75rem 2.0rem !important;
+  font-size: 150% !important;
+  font-weight: bold !important;
+  padding-left: 0 !important;
+  padding-top: 20px !important;
+  margin-left: 32px;
+  border: 0 !important;
+}
+
+.header-sep {
+  border-top: 2px solid #333 !important;
+}
+
+.card-media {
+  padding: .75rem 2.0rem !important;
+}
+
+.card-container {
+  margin: 0 -33px !important;
+}
+
+.p-0::before {
+  margin-top: -22px;
+  margin-left: -15px;
+}
+
+.card {
+  border: 0 !important;
+  background-color: transparent !important;
+  background-clip: unset !important;
+  border-radius: 0 !important;
+}
+
+.operationButtons .btn {
+  margin-left: 10px;
+}
+
+.btn {
+  box-shadow: 0 0 0 0.0rem rgba(0, 0, 0, 0) !important;
+  padding: 0 !important;
+}
+
+.input-left {
+  border: 1px solid;
+}
+
+.top {
+  padding-top: 0 !important;
+}
+
+.fill {
+  width: 100%;
+}
+
+.datatable-row {
+  height: auto !important;
+}
+
+.datatable-row-item {
+  font-style: italic !important;
+  height: auto !important;
+}
+
+#informationTableHeader {
+  font-style: normal !important;
+  font-weight: bold !important;
+}
+
+#selectButtonSpacing {
+  padding-right: 85px !important;
+}
+
+#typeSpacing {
+  margin-left: -15px !important;
+}
+
+#stateSpacing {
+  margin-left: -15px !important;
+}
+
+#titleSpacing {
+  margin-left: -15px !important;
+}
+
+#durationSpacing {
+  margin-left: -15px !important;
+}
+
+cm-conversation {
+  padding: 0 40px !important;
+}
+
+cm-conversation .row {
+  margin-bottom: 0 !important;
+}
+
+cm-communicator {
+  background-color: var(--background) !important;
+}
+
+.labels .label, cm-combo-box-chip .label {
+  margin-right: 3px !important;
+}
+
+.ticket-info {
+  border-left: var(--default-border);
+}
+
+.event-column {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(100vh - 280px);
+}
+
+.input-left {
+  border: 0 !important;
+}
+
+.form-input-special {
+  padding-left: 0 !important;
+  width: 100%;
+}
+
+.pinned {
+  background: var(--green-25) !important;
+}
+
+.icon-pin {
+  margin-top: 8px !important;
+  margin-left: 16px !important;
+}
+
+.operationButtons .btn-primary, .btn-ghost, .btn-cta {
+  padding: 0 16px !important;
+  margin-top: 12px;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.ctc {
+  min-width: 0 !important;
+  margin-right: 10px;
+}
+
+cm-conversation cm-conversation-bubble.multiline {
+  padding: 15px !important;
+  margin-bottom: 10px;
+}
+
+li.filter {
+  line-height: 30px;
+  padding-right: 10px;
+  font-size: 14px;
+}
+
+.filter-col {
+  margin-top: 5px;
+}
+
+.sort-col {
+  margin-left: -70px;
+}
+
+.search-col {
+  margin-top: -30px;
+}
+
+b.select-counter {
+  font-size: 14px;
+  line-height: 30px;
+}
+
+.operationButtons {
+  margin-top: -10px;
+}
+
+.thumbtack {
+  margin-right: 10px;
+}
+
+.info-wrapper {
+  margin-left: 20px;
+}
+
+.image-wrapper {
+  margin-top: 50px;
+}
+
+.btn.edit {
+  margin-left: 10px;
+}
+
+.btn.add {
+  margin-left: 10px;
+}
+
+.json-header {
+  font-weight: bold;
+}
+
+.list-group, .list-group-content {
+  height: auto !important;
+}
+
+.title-card {
+  margin-top: -15px !important;
+  padding-left: 65px !important;
+}
+
+.invisible {
+  display: none !important;
+}

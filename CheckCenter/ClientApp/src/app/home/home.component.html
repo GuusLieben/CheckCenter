@@ -1,0 +1,166 @@
+<input type="checkbox" id="cm-sidenav-toggle" checked>
+<label for="cm-sidenav-toggle"></label>
+
+<!-- Container identifier to enable several effects (e.g. blurring on menu open) -->
+<div class="container top top-closed" #container>
+
+  <div class="row col-12 search-col">
+    <!-- Search filter, user input based -->
+    <div class="col-5">
+      <div class="form-group">
+        <div class="form-row">
+          <div class="form-input-special">
+            <input type="text" class="form-control" id="exampleFormControlInput4"
+                   placeholder="Search..." (input)="helper.filterEvents($event.target.value)"/>
+            <span class="input-left icon">
+              <span aria-hidden="true" class="cm-icon cm-icon-search"></span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Display active global filters (coded) -->
+    <div class="col-7 filter-col" *ngIf="getGlobalFilter().length > 0">
+      <ul class="labels">
+        <li class="filter"><b>Filters :</b> <i *ngIf="getGlobalFilter().length === 0"> None</i></li>
+        <li class="label" *ngFor="let filter of getGlobalFilter()">
+          <span>{{capitalize(filter)}}</span>
+          <button aria-label="Remove" class="close" type="button" (click)="removeGlobalFilter(filter)">
+            <span class="cm-icon cm-icon-error" id='{{filter}}' aria-hidden="true"></span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Bulk action blocks -->
+  <div class="row col-12" style="margin-bottom: 20px" *ngIf="helper.selectedEvents.length > 0">
+    <div class="col-2 col-sm-3 col-md-2 text-nowrap">
+      <b class="select-counter">{{helper.selectedEventCount()}} events selected</b>
+    </div>
+    <div class="col-10 col-sm-9 col-md-10">
+      <div class="operationButtons">
+        <div class="row">
+          <div class="col-3">
+            <button class="btn btn-ghost" (click)="helper.selectedEvents = []">Deselect all</button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="openDialog(true)">Resolve</button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="openSnooze(true)">Snooze</button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary" (click)="helper.pinSelected()">Toggle Pin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row column-container col-12">
+    <!-- Ticket list identifier to allow class changes on the div when opening details -->
+    <div class="list-group check-column" #ticketList>
+      <div *ngIf="events.length > 0" class="event-column p-16">
+        <div class="list-group-header row"></div>
+
+        <!-- Make card blue if event is selected, make card green if event is pinned -->
+        <div class="list-group-content row "
+             [ngClass]="((selectedEvent.id == event.id && helper.selectedEventCount() !== 2) || (helper.selectedEvents.includes(event.id) && helper.selectedEventCount() === 2)) ? 'selected' : (helper.isPinned(event.id) ? 'pinned' : '')"
+             *ngFor="let event of events" (click)="helper.toggleEvent(event.id)">
+
+          <div class="row col-12">
+            <!-- Event checkbox -->
+            <div class="table-column icon col-1">
+              <div class="form-check v-center">
+                <label class="m-0">
+                  <input class="form-check-input"
+                         type="checkbox"
+                         value="option1"
+                         [attr.checked]="(helper.isSelected(event.id)) ? 'checked' : null"
+                         (click)="helper.selectEvent(event.id)"/>
+                  <span class="label p-0"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Lesser information -->
+            <div class="table-column text-nowrap text-truncate col-6 text-left">
+              <!-- Event type -->
+              <small style="opacity: 70%">
+                <strong style="opacity: 50%">{{event.checkType.title}}</strong> | {{
+                event.totalSeverity < 500 ? 'Low'
+                  : (event.totalSeverity >= 500 && event.totalSeverity < 750 ? 'Medium'
+                  : 'High')
+                }}
+              </small>
+
+              <!-- Event priority -->
+              <span class="cm-icon small" [ngClass]="(
+                    event.totalSeverity < 500 ? 'cm-icon-open-vertical cl-green-100'
+                    : (event.totalSeverity >= 500 && event.totalSeverity < 750 ? 'cm-icon-remove cl-orange-100'
+                    : 'cm-icon-close-vertical cl-red-100'))" aria-hidden="true"></span>
+
+            </div>
+
+            <!-- Event state, append Snoozed if snoozed -->
+            <div class="table-column text-nowrap text-truncate col-3" style="opacity: 50%">
+              <small>{{event.state.title}} <i *ngIf="helper.isSnoozed(event.id)">| Snoozed</i></small>
+            </div>
+
+            <!-- Human readable time format since added -->
+            <div class="table-column text-nowrap text-truncate col-2 text-right" style="opacity: 50%">
+              <small>{{diff(event.added)}}</small>
+            </div>
+          </div>
+
+          <!-- Prepend snoozed, pinned icon(s) if event has effect -->
+          <div class="row col-12 title-card">
+            <div class="table-column text-nowrap text-truncate col-12">
+              <i title="Snoozed until {{formatDate(helper.snoozedEvents[event.id])}}"
+                 class="far cl-green-100 cm-icon cm-icon-notification-off small thumbtack"
+                 *ngIf="helper.isSnoozed(event.id)"></i>
+              <i title="Pinned" class="fas cl-green-100 fa-thumbtack thumbtack"
+                 *ngIf="helper.isPinned(event.id)"></i>
+              <i title="Archived" class="fas fa-archive cl-red-100" *ngIf="archived(event) == true"></i>
+              {{event.title}}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <!-- If more events are loading in, display indicator (e.g. archive rendering) -->
+      <cm-indicator style="transform: scale(0.5)" *ngIf="getLoading() == true"></cm-indicator>
+
+      <!-- If no events are present, or none apply to the filter, display an illustration to ensure the user it is not a bug -->
+      <div *ngIf="events.length <= 0" class="image-wrapper">
+        <cm-image data-type="empty" data-title="No events"
+                  data-description="Nothing to see here, yay! . . yay?"></cm-image>
+      </div>
+    </div>
+
+    <!-- Detail pages, references ../check-card/ -->
+    <div class="detail-column col-8 ticket-info">
+      <!-- Ticket card identifier to allow class modifications on event selection -->
+      <div class="invisible" #ticketCard>
+
+        <!-- If only one, or more than two events are selected, display only the most recently selected event -->
+        <div class="event-column" *ngIf="helper.selectedEventCount() != 2">
+          <app-check-card [selectedEvent]="selectedEvent"></app-check-card>
+        </div>
+
+        <!-- If two events are selected, display both side by side -->
+        <div class="row" *ngIf="helper.selectedEventCount() == 2">
+          <div class="col-6 event-column">
+            <app-check-card [selectedEvent]="selectedEvents[0]"></app-check-card>
+          </div>
+          <div class="col-6 event-column">
+            <app-check-card [selectedEvent]="selectedEvents[1]"></app-check-card>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

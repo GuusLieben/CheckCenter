@@ -1,0 +1,35 @@
+<input type="checkbox" id="cm-sidenav-toggle" checked>
+<label for="cm-sidenav-toggle"></label>
+
+<div class="container p-t-16">
+  <div class="login-box">
+    <div class="inner-box">
+    </div>
+    <div class="inner-box">
+      <div class="form-group m-24 m-t-120">
+        <div class="form-row">
+          <div class="card-media tile fill m-24">
+            <h1> Sign in </h1>
+            <div>
+            </div>
+            <div class="form-input m-t-24 m-b-24 special fill">
+              <input (keydown.enter)="login()" type="text" class="form-control" id="email" placeholder="e-mail address" #email>
+            </div>
+            <div class="form-input m-t-24 m-b-24 special fill" *ngIf="loginInvalid == false">
+              <input (keydown.enter)="login()" type="password" class="form-control" id="password" placeholder="password" #password>
+            </div>
+            <div class="form-input error m-t-24 special fill" *ngIf="loginInvalid == true">
+              <input (keydown.enter)="login()" type="password" class="form-control" id="password" placeholder="password" #password>
+            </div>
+            <div class="form-input-validation">
+              <div class="form-input-notes-left cl-red-100" *ngIf="loginInvalid == true">Invalid credentials</div>
+            </div>
+                <button class="btn btn-cta m-t-24 m-b-24 fill" (click)="login()">Log in</button>
+              <i style="margin-left: 20px" *ngIf="getLoading"><cm-indicator style="" data-type="apple"></cm-indicator> Validating...</i>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

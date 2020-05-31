@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20200106200758_RemoveResolvedState.cs" />
+    <Compile Remove="Migrations\20200106200758_RemoveResolvedState.Designer.cs" />
+    <Compile Remove="Migrations\20200107205837_EventFKs.cs" />
+    <Compile Remove="Migrations\20200107205837_EventFKs.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103174739_Archive.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103174739_Archive.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103180752_RebuildStatic.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103180752_RebuildStatic.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103181334_Archive.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103181334_Archive.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103181552_Archive.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103181552_Archive.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103194048_MockIds.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200103194048_MockIds.Designer.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200108104927_ConclusionReq.cs" />
+    <Compile Remove="Migrations\ArchiveDb\20200108104927_ConclusionReq.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Domain\Domain.csproj" />
+  </ItemGroup>
+</Project>

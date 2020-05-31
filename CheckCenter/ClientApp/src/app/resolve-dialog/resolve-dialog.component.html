@@ -1,0 +1,35 @@
+<cm-dialog [id]="id">
+  <div slot="body" class="col-12">
+    <div class="form-input-special" style="display: none;">
+      <cm-select placeholder="Resolve" value="resolve" #timeSelect>
+        <cm-select-flag slot="icon"></cm-select-flag>
+        <cm-select-option slot="option" data-display="Resolve" value="resolve"></cm-select-option>
+        <cm-select-option slot="option" data-display="Remove" value="remove"></cm-select-option>
+      </cm-select>
+    </div>
+    <b>Mark as done</b>
+    <hr />
+
+    <div class="form-group" align="left">
+      <div class="form-row">
+        <div class="form-input" style="width: 100% !important">
+          <textarea class="form-control"
+                    type="text"
+                    placeholder="Enter Conclusion" required #conclusion
+                    [(ngModel)]="input"></textarea>
+          <label>Conclusion</label>
+          <div class="form-input-validation">
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </div>
+
+  <div slot="footer">
+    <button class="btn btn-secondary" (click)="cancel()"> Cancel</button>
+    <button class="btn btn-primary" (click)="okModal()"  [disabled]="conclusionReq && !input">Submit</button>
+  </div>
+</cm-dialog>

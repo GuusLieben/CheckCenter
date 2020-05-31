@@ -1,0 +1,278 @@
+<!-- Parent identifier to allow scrollTo(0,0) -->
+<div class="card" #parent>
+
+  <!--  Title and default information, no functional actions-->
+  <div class="card-header">
+    <div class="meta-title">
+      <h2>
+        {{selectedEvent.title}}
+        <button type="button" class="btn btn-secondary ctc" ngxClipboard
+                cbContent="{{selectedEvent.title}}">
+          <span class="cm-icon cm-icon-duplicate small"
+                aria-hidden="true"></span>
+        </button>
+      </h2>
+      <h2 style="margin-left: 12px; font-size: 18px; font-weight: bolder; color: var(--selected-color)"
+          class="state-title">{{selectedEvent.state.title}}</h2>
+      <p style="margin-left: 12px; font-size: 14px; font-weight: normal"><b>Description
+        :</b> {{ selectedEvent.description }}</p>
+    </div>
+  </div>
+
+  <!-- Procedure buttons, disabled when archived as archive does not allow state changes -->
+  <div *ngIf="!home.archived(selectedEvent)" style="margin-top: -40px !important;">
+    <hr class="m-24">
+    <div class="card-media tile">
+      <div class="operationButtons">
+        <div class="row">
+          <div class="col-4 col-sm-5">
+            <!-- State actions, default Done, and source specifics -->
+            <button class="btn btn-cta" (click)="home.openDialog()">Done</button>
+            <div *ngFor="let state of selectedEvent.source.states"
+                 [ngClass]="(state.title == selectedEvent.state.title ? 'invisible' : '')">
+              <button class="btn btn-cta" (click)="helper.updateState(state)">
+                {{state.title}}
+              </button>
+              <br/>
+            </div>
+          </div>
+          <div class="col-4 col-sm-5">
+            <!-- Non-state actions, analyse/investigate are based on environment settings -->
+            <a href="{{wiki}}/analyse?check={{selectedEvent.shorthand}}" target="_blank">
+              <button class="btn btn-primary">Analyse</button>
+            </a>
+            <br/>
+            <a href="{{wiki}}/investigate?check={{selectedEvent.shorthand}}" target="_blank">
+              <button class="btn btn-primary">Investigate</button>
+            </a>
+            <br/>
+            <!-- Local actions, only stored for local session -->
+            <button class="btn btn-primary"
+                    (click)="home.helper.isSnoozed(selectedEvent.id) ? home.helper.toggleEventSnooze(selectedEvent.id) : home.openSnooze()">
+              {{helper.isSnoozed(selectedEvent.id) == true ? 'Unsnooze' : 'Snooze'}}
+            </button>
+            <br/>
+            <button class="btn btn-primary"
+                    (click)="helper.toggleEventPin(selectedEvent.id, !helper.isPinned(selectedEvent.id))">
+              {{helper.isPinned(selectedEvent.id) == true ? 'Unpin' : 'Pin'}}
+            </button>
+          </div>
+          <div class="col-4 col-sm-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="m-24">
+
+  <div class="card-media tile">
+    <div class="datatable col-12">
+      <!-- If the event is archived (deleted), display when it was removed -->
+      <div class="datatable-row" *ngIf="selectedEvent.removed">
+        <div class="datatable-row-item col-3">
+          <span>Removed</span>
+        </div>
+        <div class="datatable-row-item col-9">
+          <span>{{ diff(selectedEvent.removed) }} <i class="text-white-50">({{toDateString(selectedEvent.removed)}})</i></span>
+        </div>
+      </div>
+
+      <!-- If the event is archived (resolved), display when it was finished -->
+      <div class="datatable-row" *ngIf="selectedEvent.finished">
+        <div class="datatable-row-item col-3">
+          <span>Finished</span>
+        </div>
+        <div class="datatable-row-item col-9">
+          <span>{{ diff(selectedEvent.finished) }} <i class="text-white-50">({{toDateString(selectedEvent.finished)}}
+            )</i></span>
+        </div>
+      </div>
+
+      <!-- If the event is archived with a conclusion, display the conclusion -->
+      <div class="datatable-row" *ngIf="selectedEvent.conclusion">
+        <div class="datatable-row-item col-3">
+          <span>Conclusion</span>
+        </div>
+        <div class="datatable-row-item col-9">
+          <span>{{selectedEvent.conclusion}}</span>
+        </div>
+      </div>
+
+      <!-- If the event has additional info, display it -->
+      <div *ngIf="selectedEvent.additionalInfo.length > 0">
+        <div class="datatable-row" *ngFor="let info of selectedEvent.additionalInfo">
+          <div class="datatable-row-item col-3 text-nowrap text-truncate">
+            <span>
+              <button type="button" class="btn btn-secondary ctc" ngxClipboard
+                      cbContent="{{info.key}} : {{info.value}}">
+                <span class="cm-icon cm-icon-duplicate small" aria-hidden="true"></span>
+              </button>
+              {{info.key}}
+            </span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span *ngIf="!info.value.startsWith('http')">{{info.value}}</span>
+            <span *ngIf="info.value.startsWith('http')">
+              <a href="{{info.value}}" target="_blank">
+                {{info.value}}
+                <code>(Opens in new tab)</code>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- If the event has no additional info, display a placeholder -->
+      <div class="datatable-row" *ngIf="selectedEvent.additionalInfo.length == 0">
+        <div class="datatable-row-item col-1"></div>
+        <div class="datatable-row-item col-11"><span><b>No additional info</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="m-24">
+
+  <!-- If the event has comments, open this field, otherwise remain collapsed (user can open it manually) -->
+  <cm-expansion-panel data-no-border [data-is-open]="selectedEvent.comments.length > 0" class="m-l-24 m-r-24">
+    <cm-expansion-panel-header>
+      <p class="json-header">Conversation</p>
+    </cm-expansion-panel-header>
+    <cm-expansion-panel-content slot="content">
+      <div class="card-media tile">
+        <cm-communicator>
+          <div class="body">
+            <cm-conversation>
+              <div class="row" *ngFor="let comment of selectedEvent.comments">
+                <cm-conversation-bubble>
+                  {{comment.content}}
+                  <div class="wrapper">
+                    <div class="comment-delete">
+                      <button type="button" class="btn btn-secondary ctc comment-delete">
+                        <span class="cm-icon cm-icon-delete small comment-delete" (click)="deleteComment(comment.id)"
+                              aria-hidden="true"></span>
+                      </button>
+                      <span class="timestamp">
+                        {{comment.userEmail}} - {{diff(comment.created)}}
+                  </span>
+                    </div>
+                  </div>
+
+
+                </cm-conversation-bubble>
+              </div>
+            </cm-conversation>
+          </div>
+        </cm-communicator>
+      </div>
+
+      <!-- Allow used to input comments, only if the event is not archived -->
+      <div class="form-group p-l-32 p-r-32" *ngIf="!home.archived(selectedEvent)">
+        <div class="form-row row">
+          <div class="col-11">
+            <div class="form-input fill">
+              <div>
+                <input type="text" class="form-control" name="comment"
+                       placeholder="Write a comment..." value="" #CommentForm>
+              </div>
+            </div>
+          </div>
+          <div class="col-1">
+            <button class="btn btn-cta-icon">
+          <span class="cm-icon cm-icon-send" aria-hidden="true"
+                (click)="sendComment(selectedEvent.id)"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </cm-expansion-panel-content>
+  </cm-expansion-panel>
+
+  <!-- Source information, static -->
+  <cm-expansion-panel data-no-border class="m-l-24 m-r-24">
+    <cm-expansion-panel-header>
+      <p class="json-header">Source</p>
+    </cm-expansion-panel-header>
+    <cm-expansion-panel-content slot="content">
+      <div class="datatable col-12">
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Name</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.displayName}}</span>
+          </div>
+        </div>
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Source Severity</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.sourceSeverity}}</span>
+          </div>
+        </div>
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Status</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.active == true ? 'Active' : 'Inactive'}}</span>
+          </div>
+        </div>
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Customer</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.isCustomerSource == true ? 'Yes' : 'No'}}</span>
+          </div>
+        </div>
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Permitted states</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.stateTitles}}</span>
+          </div>
+        </div>
+        <div class="datatable-row">
+          <div class="datatable-row-item col-3">
+            <span>Source type</span>
+          </div>
+          <div class="datatable-row-item col-9">
+            <span>{{selectedEvent.source.checkType ? selectedEvent.source.checkType.title : 'Generic'}}</span>
+          </div>
+        </div>
+      </div>
+    </cm-expansion-panel-content>
+  </cm-expansion-panel>
+
+
+  <!-- Event history, display who changed a state (and when) -->
+  <cm-expansion-panel data-no-border class="m-l-24 m-r-24">
+    <cm-expansion-panel-header>
+      <p class="json-header">History</p>
+    </cm-expansion-panel-header>
+    <cm-expansion-panel-content slot="content">
+      <div *ngFor="let action of selectedEvent.actionLogs">
+        <b>{{action.userEmail}}</b> changed the state from
+        <b>{{action.oldState ? action.oldState.title : 'Unknown'}}</b> to
+        <b>{{action.newState ? action.newState.title : 'Unknown'}}</b> ({{diff(action.created)}})
+        <hr>
+      </div>
+      <b *ngIf="selectedEvent.actionLogs.length == 0">No history known</b>
+    </cm-expansion-panel-content>
+  </cm-expansion-panel>
+
+  <!-- Developer assistant feature, allow user to copy event data in JSON format -->
+  <cm-expansion-panel data-no-border class="m-l-24 m-r-24">
+    <cm-expansion-panel-header>
+      <p class="json-header">Ticket JSON</p>
+    </cm-expansion-panel-header>
+    <cm-expansion-panel-content slot="content">
+      <button type="button" class="btn btn-secondary" ngxClipboard cbContent="{{selectedEvent|json}}">
+        <span class="cm-icon cm-icon-duplicate small" aria-hidden="true"></span> <small>Copy to clipboard</small>
+      </button>
+      <p><code>{{selectedEvent|json}}</code></p>
+    </cm-expansion-panel-content>
+  </cm-expansion-panel>
+</div>
