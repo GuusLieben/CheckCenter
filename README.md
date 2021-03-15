@@ -5,6 +5,9 @@ A single-page application built with:
 - [Angular](https://angular.io/) and [TypeScript](http://www.typescriptlang.org/) for client-side code
 - [Bootstrap](http://getbootstrap.com/) and [Aurora](https://www.cm.com/app/aurora-dls/introduction) for layout and styling
 
+## Preview
+![image](https://user-images.githubusercontent.com/10957963/111188268-2d44f200-85b5-11eb-824e-d09274e6f951.png)
+
 ## GitLab
 ### Branches
 The default branch is _master_, which only accepts Merge Requests, and does not accept direct pushes.
